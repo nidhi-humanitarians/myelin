@@ -1,0 +1,18 @@
+# Myelin Global Configuration
+compiler:
+  min_cluster_size: 50              # Minimum occurrences to qualify as a habit
+  train_split_ratio: 0.70           # Chronological split: 70% past (train)
+  test_split_ratio: 0.30            # 30% future (held-out test)
+  min_agreement_threshold: 0.98     # Required agreement gate on non-unsure decisions (98%)
+  max_ast_nodes: 120                # Target simplicity limit for compiled code
+
+sandbox:
+  execution_timeout_ms: 100         # Maximum milliseconds per compiled function call
+  allow_network: false              # Strict zero-network enforcement
+  allow_file_io: false              # Strict zero-disk I/O enforcement
+
+synthesis:
+  model: "claude-3-5-sonnet-20241022"
+  fallback_model: "gpt-4o"
+  temperature: 0.1
+  max_refinement_attempts: 3

@@ -1,0 +1,14 @@
+{
+  "habit_id": "tau_airline_extract_pnr_v1",
+  "target_tool": "get_reservation_details",
+  "target_argument": "reservation_id",
+  "status": "PASSED_GATE",
+  "ast_node_count": 36,
+  "metrics": {
+    "agreement_rate": 0.988,
+    "coverage_rate": 0.795,
+    "unsure_rate": 0.205,
+    "tokens_saved_per_1k": 2100000,
+    "avg_latency_ms": 0.04
+  }
+}

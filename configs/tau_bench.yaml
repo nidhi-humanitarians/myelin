@@ -1,0 +1,22 @@
+# Adapter Configuration for tau-bench Trajectories
+benchmark: "tau-bench"
+domain: "airline"                   # or "retail"
+
+field_mappings:
+  episodes_key: null                # null if list of episodes at root
+  trajectory_key: "traj"
+  turn_role_key: "role"
+  turn_content_key: "content"
+  tool_calls_key: "tool_calls"
+  tool_name_path: "function.name"
+  tool_args_path: "function.arguments"
+
+candidate_habits:
+  - name: "extract_reservation_id"
+    tool_name: "get_reservation_details"
+    target_arg: "reservation_id"
+    regex_pattern: "\b([A-Z0-9]{6})\b"
+  - name: "extract_user_id"
+    tool_name: "get_user_details"
+    target_arg: "user_id"
+    regex_pattern: "\b([a-z]+_[a-z]+_\d{4})\b"

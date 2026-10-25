@@ -1,0 +1,14 @@
+{
+  "habit_id": "tau_airline_extract_user_id_v1",
+  "target_tool": "get_user_details",
+  "target_argument": "user_id",
+  "status": "PASSED_GATE",
+  "ast_node_count": 28,
+  "metrics": {
+    "agreement_rate": 0.994,
+    "coverage_rate": 0.832,
+    "unsure_rate": 0.168,
+    "tokens_saved_per_1k": 1850000,
+    "avg_latency_ms": 0.03
+  }
+}
