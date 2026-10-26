@@ -24,9 +24,11 @@ By compiling these specific routines into deterministic Python functions, an age
 | File | Episodes | Total Turns | Total Tool Calls | Domain | Model |
 | :--- | :--- | :--- | :--- | :--- | :--- |
 | `gpt-4o-airline.json` | 200 | 5,308 | 1,164 | Airline | GPT-4o |
-| `sonnet-35-new-airline.json` | 400 | ~10,500 | 2,761 | Airline | Claude 3.5 Sonnet |
-| `gpt-4o-retail.json` | 460 | ~12,000 | 3,274 | Retail | GPT-4o |
-| `sonnet-35-new-retail.json` | 460 | ~12,500 | 3,410 | Retail | Claude 3.5 Sonnet |
+| `sonnet-35-new-airline.json` | 400 | 10,148 | 2,761 | Airline | Claude 3.5 Sonnet |
+| `gpt-4o-retail.json` | 460 | 14,048 | 3,274 | Retail | GPT-4o |
+| `sonnet-35-new-retail.json` | 920 | 27,088 | 7,086 | Retail | Claude 3.5 Sonnet |
+
+*Counts re-verified from the raw files: Episodes = records per file; Total Turns = messages across all trajectories; Total Tool Calls = `tool_calls` entries on assistant messages.*
 
 ---
 
@@ -58,17 +60,19 @@ Per the project specification, only decision clusters with **$\ge 50$ occurrence
 ## 4. Deep-Dive Case Studies & Operational Inefficiencies
 
 ### Case Study A: The "Reservation Traversal Loop"
-In `gpt-4o-airline.json` (Episode 2), user `omar_davis_3817` requested downgrading upcoming business flights.
+In `gpt-4o-airline.json` (task 2, trial 2: record index 102), user `omar_davis_3817` requested downgrading upcoming business flights.
 1. The agent queried `get_user_details(user_id="omar_davis_3817")`.
 2. The user profile returned a list of 6 reservation IDs:
    ```json
    ["JG7FMM", "LQ940Q", "2FBBAH", "X7BYG1", "EQ1G6C", "BOH180"]
    ```
 3. **The LLM Loop:** Rather than iterating programmatically, the agent queried GPT-4o **six separate times in sequential turns**:
-   * Turn 6: `get_reservation_details({"reservation_id": "JG7FMM"})`
-   * Turn 8: `get_reservation_details({"reservation_id": "LQ940Q"})`
-   * Turn 10: `get_reservation_details({"reservation_id": "2FBBAH"})`
-   * ...and so on.
+   * Turn 8: `get_reservation_details({"reservation_id": "JG7FMM"})`
+   * Turn 10: `get_reservation_details({"reservation_id": "LQ940Q"})`
+   * Turn 12: `get_reservation_details({"reservation_id": "2FBBAH"})`
+   * ...and so on, through Turn 18 (`BOH180`).
+
+   This is the common pattern for the task, not a one-off: across all 12 runs of task 2 (4 GPT-4o, 8 Claude 3.5 Sonnet), 9 made exactly six reservation lookups. The first GPT-4o run (trial 0, index 2) stopped after three.
 4. **Waste Profile:** Each turn carried the entire cumulative conversation history (~2,500 tokens). Total cost was **~15,000 tokens and 9 seconds of latency** for an operation that a 3-line Python script performs in **0.002 milliseconds**.
 
 ### Case Study B: Predictable User ID & PNR Extraction

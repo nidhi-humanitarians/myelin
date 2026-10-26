@@ -31,7 +31,7 @@ Analysis of real `tau-bench` trajectories (`gpt-4o-airline.json`, `sonnet-35-new
 | **`calculate`** | **96+ calls** | Basic arithmetic (baggage fees, ticket differences) | ~2,000 tokens & 1.2s for basic math |
 
 ### Case Study: The "Reservation Traversal Loop" Bottleneck
-In Episode 2 of the airline benchmark, an agent looked up user `omar_davis_3817`. The profile returned 6 reservations: `['JG7FMM', 'LQ940Q', '2FBBAH', 'X7BYG1', 'EQ1G6C', 'BOH180']`.
+In airline task 2 (GPT-4o, trial 2: `gpt-4o-airline.json` record index 102), an agent looked up user `omar_davis_3817`. The profile returned 6 reservations: `['JG7FMM', 'LQ940Q', '2FBBAH', 'X7BYG1', 'EQ1G6C', 'BOH180']`.
 
 * **Current Agent Behavior:** The LLM was queried **6 consecutive times in a row**, sending ~2,500 tokens of context each turn, just to emit the next reservation ID in the list.
 * **Cost:** 15,000 tokens and ~9 seconds of user wait time.
